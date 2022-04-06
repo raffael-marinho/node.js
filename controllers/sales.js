@@ -8,7 +8,7 @@ const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
 
 router.get('/', async (req, res) => {
-  const salesAll = returnSales();
+  const salesAll = await returnSales();
 
   if (salesAll.length === 0) {
     return res.sendStatus(HTTP_NOT_FOUND_STATUS);
@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
       .status(HTTP_NOT_FOUND_STATUS)
       .json({ message: 'Sale not found' });
   }
-  return res.status(HTTP_OK_STATUS).json(salesAll[0]);
+  return res.status(HTTP_OK_STATUS).json(salesAll);
 });
 
 module.exports = router;
