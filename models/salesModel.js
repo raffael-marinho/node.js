@@ -6,4 +6,14 @@ async function sales() {
   return result[0];
 }
 
-module.exports = sales;
+async function salesId(parameter) {
+  const result = await connection.execute(
+    `SELECT * FROM sales WHERE id = ${parameter}`,
+  );
+  // console.log(result[0]);
+  return result[0];
+}
+
+// salesId(1);
+// sales();
+module.exports = { sales, salesId };
