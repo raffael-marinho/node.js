@@ -5,6 +5,7 @@ const router = express.Router();
 const {
   returnproducts,
   returnproductsId,
+  returnProductsIsert,
 } = require('../services/productsServices');
 
 const { validProducts } = require('../middlewares/productsMiddleware');
@@ -34,8 +35,15 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', validProducts, async (req, res) => {
-  console.log(req.body);
-  return res.status(HTTP_OK_STATUS).json();
+  // console.log(req.body);
+  const { name, quantity } = req.body;
+
+  const validInsertProduct = await returnProductsIsert(name, quantity);
+  // console.log(validInsertProduct);
+  if (validInsertProduct === false) {
+    return res.status(409).json({ message: 'Product already exists' });
+  }
+  return res.status(201).json(validInsertProduct);
 });
 
 module.exports = router;
