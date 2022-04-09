@@ -3,6 +3,7 @@ const {
   productsId,
   insertProducts,
   getProductByName,
+  updateProducts,
 } = require('../models/productsModel');
 
 async function returnproducts() {
@@ -25,4 +26,17 @@ async function returnProductsIsert(name, quantity) {
   return { id: productsIdAll[0].insertId, name, quantity };
 }
 
-module.exports = { returnproducts, returnproductsId, returnProductsIsert };
+async function returnUpdateProducts(id, name, quantity) {
+  const importUpdate = await updateProducts(id, name, quantity);
+  if (importUpdate === false) {
+    return false;
+  }
+  return { id, name, quantity };
+}
+
+module.exports = {
+  returnproducts,
+  returnproductsId,
+  returnProductsIsert,
+  returnUpdateProducts,
+};

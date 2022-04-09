@@ -31,6 +31,28 @@ async function getProductByName(name) {
   );
   return result[0];
 }
+
+async function updateProducts(id, name, quantity) {
+  const resultIdExist = await connection.execute(
+    'SELECT * FROM products WHERE id = ?',
+    [id],
+  );
+  // console.log(resultIdExist);
+  if (resultIdExist[0].length === 0) {
+    return false;
+  }
+  const result = await connection.execute(
+    'UPDATE products SET name = ?, quantity = ? WHERE id = ?',
+    [name, quantity, id],
+  );
+  return result[0];
+}
 // productsId(2);
 // products();
-module.exports = { products, productsId, insertProducts, getProductByName };
+module.exports = {
+  products,
+  productsId,
+  insertProducts,
+  getProductByName,
+  updateProducts,
+};

@@ -6,6 +6,7 @@ const {
   returnproducts,
   returnproductsId,
   returnProductsIsert,
+  returnUpdateProducts,
 } = require('../services/productsServices');
 
 const { validProducts } = require('../middlewares/productsMiddleware');
@@ -44,6 +45,18 @@ router.post('/', validProducts, async (req, res) => {
     return res.status(409).json({ message: 'Product already exists' });
   }
   return res.status(201).json(validInsertProduct);
+});
+
+router.put('/:id', validProducts, async (req, res) => {
+  // console.log(req.body);
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+
+  const adjustUpdate = await returnUpdateProducts(id, name, quantity);
+  if (adjustUpdate === false) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  return res.status(200).json(adjustUpdate);
 });
 
 module.exports = router;
