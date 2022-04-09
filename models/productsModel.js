@@ -47,6 +47,21 @@ async function updateProducts(id, name, quantity) {
   );
   return result[0];
 }
+async function deleteProducts(id) {
+  const resultIdExist = await connection.execute(
+    'SELECT * FROM products WHERE id = ?',
+    [id],
+  );
+  // console.log(resultIdExist);
+  if (resultIdExist[0].length === 0) {
+    return false;
+  }
+  const result = await connection.execute(
+    'DELETE FROM products WHERE id = ?',
+    [id],
+  );
+  return result[0];
+}
 // productsId(2);
 // products();
 module.exports = {
@@ -55,4 +70,5 @@ module.exports = {
   insertProducts,
   getProductByName,
   updateProducts,
+  deleteProducts,
 };

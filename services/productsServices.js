@@ -4,6 +4,7 @@ const {
   insertProducts,
   getProductByName,
   updateProducts,
+  deleteProducts,
 } = require('../models/productsModel');
 
 async function returnproducts() {
@@ -34,9 +35,18 @@ async function returnUpdateProducts(id, name, quantity) {
   return { id, name, quantity };
 }
 
+async function returnDeleteProducts(id) {
+  const importUpdate = await deleteProducts(id);
+  if (importUpdate === false) {
+    return false;
+  }
+  return true;
+}
+
 module.exports = {
   returnproducts,
   returnproductsId,
   returnProductsIsert,
   returnUpdateProducts,
+  returnDeleteProducts,
 };

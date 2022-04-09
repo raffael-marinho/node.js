@@ -7,6 +7,7 @@ const {
   returnproductsId,
   returnProductsIsert,
   returnUpdateProducts,
+  returnDeleteProducts,
 } = require('../services/productsServices');
 
 const { validProducts } = require('../middlewares/productsMiddleware');
@@ -57,6 +58,16 @@ router.put('/:id', validProducts, async (req, res) => {
     return res.status(404).json({ message: 'Product not found' });
   }
   return res.status(200).json(adjustUpdate);
+});
+router.delete('/:id', async (req, res) => {
+  // console.log(req.body);
+  const { id } = req.params;
+
+  const adjustUpdate = await returnDeleteProducts(id);
+  if (adjustUpdate === false) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  return res.sendStatus(204);
 });
 
 module.exports = router;
