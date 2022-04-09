@@ -7,9 +7,11 @@ const {
   returnproductsId,
 } = require('../services/productsServices');
 
+const { validProducts } = require('../middlewares/productsMiddleware');
+
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
-
+// const HTTP_BAD_REQUEST_STATUS = 400;
 router.get('/', async (req, res) => {
   const productsAll = await returnproducts();
   // console.log(productsAll);
@@ -29,6 +31,11 @@ router.get('/:id', async (req, res) => {
       .json({ message: 'Product not found' });
   }
   return res.status(HTTP_OK_STATUS).json(productsAll[0]);
+});
+
+router.post('/', validProducts, async (req, res) => {
+  console.log(req.body);
+  return res.status(HTTP_OK_STATUS).json();
 });
 
 module.exports = router;

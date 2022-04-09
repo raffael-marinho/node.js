@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const { returnSales, returnSalesId } = require('../services/salesServices');
+const { validSales } = require('../middlewares/salesMiddleware');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
@@ -27,4 +28,8 @@ router.get('/:id', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(salesAll);
 });
 
+router.post('/', validSales, async (req, res) => {
+  console.log(req.body);
+  return res.status(HTTP_OK_STATUS).json();
+});
 module.exports = router;

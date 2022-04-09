@@ -6,6 +6,8 @@ async function products() {
   return result[0];
 }
 
+// products();
+
 async function productsId(parameter) {
   const result = await connection.execute(
     `SELECT * FROM products WHERE id = ${parameter}`,

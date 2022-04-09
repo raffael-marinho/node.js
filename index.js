@@ -4,6 +4,10 @@ const express = require('express');
 
 const app = express();
 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
 const products = require('./controllers/products');
 const sales = require('./controllers/sales');
 
