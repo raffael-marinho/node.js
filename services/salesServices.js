@@ -1,4 +1,4 @@
-const { sales, salesId } = require('../models/salesModel');
+const { sales, salesId, insertSales } = require('../models/salesModel');
 
 async function returnSales() {
   const salesAll = await sales();
@@ -14,10 +14,15 @@ async function returnSalesId(id) {
   const salesIdAll = await salesId(id);
   // console.log(salesIdAll);
   return salesIdAll.map((sale) => ({
-      productId: sale.product_id,
-      date: sale.date,
-      quantity: sale.quantity,
-    }));
+    productId: sale.product_id,
+    date: sale.date,
+    quantity: sale.quantity,
+  }));
 }
 
-module.exports = { returnSales, returnSalesId };
+async function returnInsertSales(salesARR) {
+  const result = await insertSales(salesARR);
+  return result;
+}
+
+module.exports = { returnSales, returnSalesId, returnInsertSales };

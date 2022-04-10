@@ -2,7 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
-const { returnSales, returnSalesId } = require('../services/salesServices');
+const {
+  returnSales,
+  returnSalesId,
+  returnInsertSales,
+} = require('../services/salesServices');
 const { validSales } = require('../middlewares/salesMiddleware');
 
 const HTTP_OK_STATUS = 200;
@@ -28,8 +32,10 @@ router.get('/:id', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(salesAll);
 });
 
-router.post('/', validSales, async (req, res) => {
-  console.log(req.body);
-  return res.status(HTTP_OK_STATUS).json();
+router.post('/', async (req, res) => {
+  // console.log(req.body);
+  const { body } = req;
+  const insert = await returnInsertSales(body);
+  return res.status(201).json(insert);
 });
 module.exports = router;
