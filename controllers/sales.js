@@ -6,8 +6,9 @@ const {
   returnSales,
   returnSalesId,
   returnInsertSales,
+  returnUpdateSales,
 } = require('../services/salesServices');
-const { validSales } = require('../middlewares/salesMiddleware');
+// const { validSales } = require('../middlewares/salesMiddleware');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
@@ -38,4 +39,15 @@ router.post('/', async (req, res) => {
   const insert = await returnInsertSales(body);
   return res.status(201).json(insert);
 });
+
+router.put('/:id', async (req, res) => {
+  // console.log(req.body);
+  const { body } = req;
+  const { id } = req.params;
+
+  const insert = await returnUpdateSales(body, id);
+
+  return res.status(200).json(insert);
+});
+
 module.exports = router;

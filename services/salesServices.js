@@ -1,4 +1,4 @@
-const { sales, salesId, insertSales } = require('../models/salesModel');
+const { sales, salesId, insertSales, updateSales } = require('../models/salesModel');
 
 async function returnSales() {
   const salesAll = await sales();
@@ -24,5 +24,9 @@ async function returnInsertSales(salesARR) {
   const result = await insertSales(salesARR);
   return result;
 }
+async function returnUpdateSales(salesARR, id) {
+  const result = await updateSales(salesARR, id);
+  return result;
+}
 
-module.exports = { returnSales, returnSalesId, returnInsertSales };
+module.exports = { returnSales, returnSalesId, returnInsertSales, returnUpdateSales };
