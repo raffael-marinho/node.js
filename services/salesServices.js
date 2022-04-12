@@ -34,8 +34,8 @@ async function returnUpdateSales(salesARR, id) {
   const result = await updateSales(salesARR, id);
   return result;
 }
-async function returnDeleteSales(salesARR, id) {
-  const result = await deleteSales(salesARR, id);
+async function returnDeleteSales(id) {
+  const result = await deleteSales(id);
   return result;
 }
 
