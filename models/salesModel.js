@@ -9,7 +9,14 @@ const mapDell = async (arr) => {
   });
 };
 const map = async (arr, id) =>
-  arr.map(async (sale) => {
+  Promise.all(arr.map(async (sale) => {
+    const storage = await connection.execute(
+      'SELECT * FROM products WHERE id = ?',
+      [sale.productId],
+    );
+    if (storage[0][0].quantity < sale.quantity) {
+      return false;
+    }
     await connection.execute(
       'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?,?,?)',
       [id, sale.productId, sale.quantity],
@@ -19,7 +26,7 @@ const map = async (arr, id) =>
       [sale.quantity, sale.productId],
     );
     return { productId: sale.productId, quantity: sale.quantity };
-  });
+  }));
 
 async function sales() {
   const result = await connection.execute(
@@ -45,9 +52,13 @@ async function insertSales(salesArray) {
     'INSERT INTO sales (date) VALUES (NOW())',
   );
   const id = result[0].insertId;
-  const itemsSold = map(salesArray, id);
-  console.log(itemsSold);
-
+  const itemsSold = await map(salesArray, id);
+  const find = itemsSold.some((item) => item === false);
+  console.log(find);
+  if (find) {
+    console.log('to aqui');
+    return false;
+  }
   return { id, itemsSold: salesArray };
 }
 
@@ -62,11 +73,11 @@ async function complement(id, salesArray) {
     id,
   ]);
   await salesArray.map(async (sale) => {
-      await connection.execute(
-        'UPDATE products SET quantity = quantity + ? WHERE id = ?',
-        [sale.quantity, sale.productId],
-      );
-    });
+    await connection.execute(
+      'UPDATE products SET quantity = quantity + ? WHERE id = ?',
+      [sale.quantity, sale.productId],
+    );
+  });
 }
 async function updateSales(salesArray, id) {
   const result = await complement(id, salesArray);

@@ -39,6 +39,12 @@ router.post('/', validSales, async (req, res) => {
   // console.log(req.body);
   const { body } = req;
   const insert = await returnInsertSales(body);
+  console.log({ insert });
+  if (insert === false) {
+    return res
+      .status(422)
+      .json({ message: 'Such amount is not permitted to sell' });
+  }
   return res.status(201).json(insert);
 });
 
