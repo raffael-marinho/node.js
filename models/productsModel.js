@@ -37,7 +37,7 @@ async function updateProducts(id, name, quantity) {
     'SELECT * FROM products WHERE id = ?',
     [id],
   );
-  // console.log(resultIdExist);
+  console.log(resultIdExist);
   if (resultIdExist[0].length === 0) {
     return false;
   }
@@ -45,8 +45,10 @@ async function updateProducts(id, name, quantity) {
     'UPDATE products SET name = ?, quantity = ? WHERE id = ?',
     [name, quantity, id],
   );
+  // console.log(result[0]);
   return result[0];
 }
+
 async function deleteProducts(id) {
   const resultIdExist = await connection.execute(
     'SELECT * FROM products WHERE id = ?',

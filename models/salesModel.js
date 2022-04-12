@@ -59,6 +59,27 @@ async function updateSales(salesArray, id) {
   return { saleId: id, itemUpdated: salesArray };
 }
 
+async function deleteSales(id) {
+  console.log(id);
+  const resultIdExist = await connection.execute(
+    'SELECT * FROM sales WHERE id = ?',
+    [id],
+  );
+  if (resultIdExist[0].length === 0) {
+    return false;
+  }
+
+  await connection.execute(
+    'DELETE FROM sales_products WHERE sale_id = ?',
+    [id],
+  );
+
+  await connection.execute(
+    'DELETE FROM sales WHERE id = ?',
+    [id],
+  );
+  return true;
+}
 // salesId(1);
 // sales();
-module.exports = { sales, salesId, insertSales, updateSales };
+module.exports = { sales, salesId, insertSales, updateSales, deleteSales };

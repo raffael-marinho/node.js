@@ -7,8 +7,10 @@ const {
   returnSalesId,
   returnInsertSales,
   returnUpdateSales,
+  returnDeleteSales,
 } = require('../services/salesServices');
-// const { validSales } = require('../middlewares/salesMiddleware');
+
+const { validSales } = require('../middlewares/salesMiddleware');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
@@ -33,14 +35,14 @@ router.get('/:id', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(salesAll);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validSales, async (req, res) => {
   // console.log(req.body);
   const { body } = req;
   const insert = await returnInsertSales(body);
   return res.status(201).json(insert);
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validSales, async (req, res) => {
   // console.log(req.body);
   const { body } = req;
   const { id } = req.params;
@@ -48,6 +50,16 @@ router.put('/:id', async (req, res) => {
   const insert = await returnUpdateSales(body, id);
 
   return res.status(200).json(insert);
+});
+router.delete('/:id', async (req, res) => {
+  // console.log(req.body);
+  const { id } = req.params;
+
+  const insert = await returnDeleteSales(id);
+  if (insert === false) {
+    return res.status(404).json({ message: 'Sale not found' });
+  }
+  return res.sendStatus(204);
 });
 
 module.exports = router;
