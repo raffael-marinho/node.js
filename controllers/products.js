@@ -1,6 +1,6 @@
 const express = require('express');
 
-const router = express.Router();
+const routerProducts = express.Router();
 
 const {
   returnproducts,
@@ -15,16 +15,18 @@ const { validProducts } = require('../middlewares/productsMiddleware');
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
 // const HTTP_BAD_REQUEST_STATUS = 400;
-router.get('/', async (req, res) => {
+const getAll = async (req, res) => {
   const productsAll = await returnproducts();
   // console.log(productsAll);
   if (productsAll.length === 0) {
     return res.sendStatus(HTTP_NOT_FOUND_STATUS);
   }
   return res.status(HTTP_OK_STATUS).json(productsAll);
-});
+};
 
-router.get('/:id', async (req, res) => {
+routerProducts.get('/', getAll);
+
+const getById = async (req, res) => {
   const { id } = req.params;
   const productsAll = await returnproductsId(id);
 
@@ -34,9 +36,11 @@ router.get('/:id', async (req, res) => {
       .json({ message: 'Product not found' });
   }
   return res.status(HTTP_OK_STATUS).json(productsAll[0]);
-});
+};
 
-router.post('/', validProducts, async (req, res) => {
+routerProducts.get('/:id', getById);
+
+const insertProduct = async (req, res) => {
   // console.log(req.body);
   const { name, quantity } = req.body;
 
@@ -46,9 +50,11 @@ router.post('/', validProducts, async (req, res) => {
     return res.status(409).json({ message: 'Product already exists' });
   }
   return res.status(201).json(validInsertProduct);
-});
+};
 
-router.put('/:id', validProducts, async (req, res) => {
+routerProducts.post('/', validProducts, insertProduct);
+
+const updateProduct = async (req, res) => {
   // console.log(req.body);
   const { id } = req.params;
   const { name, quantity } = req.body;
@@ -58,8 +64,11 @@ router.put('/:id', validProducts, async (req, res) => {
     return res.status(404).json({ message: 'Product not found' });
   }
   return res.status(200).json(adjustUpdate);
-});
-router.delete('/:id', async (req, res) => {
+};
+
+routerProducts.put('/:id', validProducts, updateProduct);
+
+const deleteProduct = async (req, res) => {
   // console.log(req.body);
   const { id } = req.params;
 
@@ -68,6 +77,8 @@ router.delete('/:id', async (req, res) => {
     return res.status(404).json({ message: 'Product not found' });
   }
   return res.sendStatus(204);
-});
+};
 
-module.exports = router;
+routerProducts.delete('/:id', deleteProduct);
+
+module.exports = { routerProducts, getAll, getById, insertProduct, updateProduct, deleteProduct };

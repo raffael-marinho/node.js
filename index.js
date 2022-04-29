@@ -8,17 +8,17 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 
-const products = require('./controllers/products');
-const sales = require('./controllers/sales');
+const { routerProducts } = require('./controllers/products');
+const { routerSales } = require('./controllers/sales');
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/products', products);
+app.use('/products', routerProducts);
 
-app.use('/sales', sales);
+app.use('/sales', routerSales);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);

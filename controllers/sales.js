@@ -1,6 +1,6 @@
 const express = require('express');
 
-const router = express.Router();
+const routerSales = express.Router();
 
 const {
   returnSales,
@@ -15,15 +15,18 @@ const { validSales } = require('../middlewares/salesMiddleware');
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
 
-router.get('/', async (req, res) => {
+const getAll = async (req, res) => {
   const salesAll = await returnSales();
 
   if (salesAll.length === 0) {
     return res.sendStatus(HTTP_NOT_FOUND_STATUS);
   }
   return res.status(HTTP_OK_STATUS).send(salesAll);
-});
-router.get('/:id', async (req, res) => {
+};
+
+routerSales.get('/', getAll);
+
+const getById = async (req, res) => {
   const { id } = req.params;
   const salesAll = await returnSalesId(id);
 
@@ -33,9 +36,11 @@ router.get('/:id', async (req, res) => {
       .json({ message: 'Sale not found' });
   }
   return res.status(HTTP_OK_STATUS).json(salesAll);
-});
+};
 
-router.post('/', validSales, async (req, res) => {
+routerSales.get('/:id', getById);
+
+const create = async (req, res) => {
   // console.log(req.body);
   const { body } = req;
   const insert = await returnInsertSales(body);
@@ -46,9 +51,11 @@ router.post('/', validSales, async (req, res) => {
       .json({ message: 'Such amount is not permitted to sell' });
   }
   return res.status(201).json(insert);
-});
+};
 
-router.put('/:id', validSales, async (req, res) => {
+routerSales.post('/', validSales, create);
+
+const update = async (req, res) => {
   // console.log(req.body);
   const { body } = req;
   const { id } = req.params;
@@ -56,8 +63,11 @@ router.put('/:id', validSales, async (req, res) => {
   const insert = await returnUpdateSales(body, id);
 
   return res.status(200).json(insert);
-});
-router.delete('/:id', async (req, res) => {
+};
+
+routerSales.put('/:id', validSales, update);
+
+const deleteSales = async (req, res) => {
   // console.log(req.body);
   const { id } = req.params;
 
@@ -66,6 +76,8 @@ router.delete('/:id', async (req, res) => {
     return res.status(404).json({ message: 'Sale not found' });
   }
   return res.sendStatus(204);
-});
+};
 
-module.exports = router;
+routerSales.delete('/:id', deleteSales);
+
+module.exports = { routerSales, getAll, getById, create, update, deleteSales };
