@@ -26,4 +26,5 @@ ___
 - organizar o codigo, deixar limpo;
 
 ## imagem do projeto rodando:
-![print](../sd-016-a-store-manager//public/img/in.png)
+
+![print](./public/img/in.png)
